@@ -18,11 +18,8 @@ php api/check-ticket.php {event_id} {ticket_code}
 php api/update-ticket.php {event_id} {ticket_code} {status}
 
 
-/**
-*
-    * @author Fahri Ardiansyah
-    * @copyright (c) 2024
-    * @license Fahri Ardiansyah
 
-*
-*/
+ * @author Fahri Ardiansyah
+ * @copyright (c) 2024
+ * @license Fahri Ardiansyah
+
