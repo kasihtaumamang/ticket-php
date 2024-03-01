@@ -1,33 +1,55 @@
 <?php
-// generate-ticket.php
+$servername = "localhost";
+$username = "root";
+$password = "ahhmantap";
+$database = "db_ticket";
 
-// Cek argumen baris perintah
-if ($argc !== 3) {
-    die("Penggunaan: php generate-ticket.php {event_id} {total_ticket}\n");
-}
-
-// Dapatkan event_id dan total_ticket dari argumen baris perintah
-$event_id = $argv[1];
-$total_tickets = $argv[2];
-
-// Koneksi ke database (Anggap MySQL, ubah sesuai dengan database Anda)
-$mysqli = new mysqli("localhost", "username", "password", "database");
+$conn = new mysqli($servername, $username, $password, $database);
 
 // Periksa koneksi
-if ($mysqli->connect_error) {
-    die("Koneksi gagal: " . $mysqli->connect_error . "\n");
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+} else {
+    function generateTicketCode($event_id)
+    {
+        return 'LCS' . $event_id . generateRandomAlphaNumeric(7);
+    }
+
+    function generateRandomAlphaNumeric($length)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
+    }
+
+    function insertTickets($event_id, $total_tickets)
+    {
+        global $conn;
+
+        for ($i = 0; $i < $total_tickets; $i++) {
+            $ticket_code = generateTicketCode($event_id);
+            $sql = "INSERT INTO tickets (event_id, ticket_code) VALUES ($event_id, '$ticket_code')";
+
+            if ($conn->query($sql) !== TRUE) {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }
+    }
+
+    $event_id = $argv[1] ?? null;
+    $total_tickets = $argv[2] ?? null;
+
+    if ($event_id && $total_tickets) {
+        insertTickets($event_id, $total_tickets);
+        echo "Tickets generated successfully.\n";
+    } else {
+        echo "Invalid command. Usage: php generate-ticket.php {event_id} {total_tickets}\n";
+    }
 }
 
-// Generate dan masukkan tiket ke dalam database
-for ($i = 0; $i < $total_tickets; $i++) {
-    $ticket_code = 'LCS' . substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 7);
-    $status = 'available';
-
-    // Masukkan tiket ke dalam database
-    $mysqli->query("INSERT INTO tickets (event_id, ticket_code, status) VALUES ('$event_id', '$ticket_code', '$status')");
-}
-
-// Tutup koneksi database
-$mysqli->close();
-
-echo "Tiket berhasil dibuat.\n";
+$conn->close();
