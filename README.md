@@ -11,11 +11,11 @@ php generate-ticket.php {event_id} {total_ticket}
 
 2. Jalankan perintah berikut untuk api check tiket:
 ~bash
-php api/check-ticket.php {event_id} {total_ticket}
+php api/check-ticket.php {event_id} {ticket_code}
 
 3. Jalankan perintah berikut untuk api update tiket:
 ~bash
-php api/update-ticket.php {event_id} {total_ticket} {status}
+php api/update-ticket.php {event_id} {ticket_code} {status}
 
 
 /**
