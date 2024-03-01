@@ -14,7 +14,7 @@ php generate-ticket.php {event_id} {total_ticket}
 /**
 *
     * @author Fahri Ardiansyah
-    * @copyright Copyright (c) 2024
+    * @copyright (c) 2024
     * @license Fahri Ardiansyah
 
 *
